@@ -8,7 +8,8 @@ class GuiIr {
  */
 		public static void main(String[] args) {
 			
-			Exp frame=new Exp();
+			@SuppressWarnings("unused")
+			GlobalFrame frame=new GlobalFrame();
 		}
 		
 }
