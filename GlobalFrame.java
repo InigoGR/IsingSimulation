@@ -19,17 +19,20 @@ import javax.swing.filechooser.FileSystemView;
 /*
  * Author: Inigo Gonzalez Ruiz
  * Version: 17/12/2018
+ * Problems:
+ * 	-InputData class Bi always has temperature 0.9
+ * 
  * To do for next version:
- * 	-Finish implementation of simulation for multiple temperatures
+ * 	-Handle exception cases for the input
  * 	-LongSimulation implementation
  * Implemented in this version:
  * 	-simulation and results button actions
  * 	-choosing a file through its directory	
- * 	-changed IR2MS to not return a Result object
  * 	-added test print to the graph methods in the results class
  * 	-added implementation of IFlipAcceptance to Og
  * 	-added inheritance of InputData to Bi
  * 	-changed doIaccept to doIAccept in IFlipAcceptance
+ * 	-added arrayList of results initialization in Re
  * 
  * Class that creates the JFrame objects that will allow to perform
  * the simulation and show the results. 
@@ -40,7 +43,6 @@ public class GlobalFrame {
 	
 	String filePath=null;//contains the name of the file
 	InputData inputData;//input data
-	InputData inputDataVar;//input data for multiple simulations
 	Double inTemp=0.0;
 	Double finTemp=300.0;
 	Double temperatureIncrement=30.0;
@@ -100,11 +102,10 @@ public class GlobalFrame {
 			fileReader.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){  
 			           filePath=tf.getText();  //getting the file name
-			           inputData=new Bi(); //Creating input object TODO choose prefered class
-			           inputData.read(filePath); //Reading file 
+			           inputData=new Bi(); //Creating input object TODO choose prefered class for InputData
+			           inputData.read(filePath);; //Reading file 
 			           inputFrame.setVisible(false); //Closing frame
 			           simOptionsFrame.setVisible(true); //Opening new frame
-			           System.out.println(filePath); //Printing file path
 			           
 			           
 			}
@@ -134,7 +135,7 @@ public class GlobalFrame {
 			});
 			
 			//Button for multiple temperature simulations
-			JButton multSim=new JButton("Read from file");//creating instance of JButton  
+			JButton multSim=new JButton("Various temperatures");//creating instance of JButton  
 			multSim.setBounds(100,200,200, 40);//x axis, y axis, width, height  
 	
 			multSim.addActionListener(new ActionListener(){  
@@ -234,13 +235,13 @@ public class GlobalFrame {
 				//////////////////////////////
 				//Simulation button actions///	
 				//////////////////////////////
-				sim=new He();//TODO choose preferred class
-				results=new Re();//TODO choose preferred class
+				sim=new He();//TODO choose preferred class for Simulation
+				results=new Re();//TODO choose preferred class for Results
 				if(multipleTemps) {
 				for(double T=inTemp; T<=finTemp; T=T+temperatureIncrement) {
 					//Creating an inputData with a different temperature for every simulation
-					//TODO choose preferred class
-					inputDataVar=new Bi(inputData.latticeLength, T, inputData.H, inputData.nJ, inputData.J, inputData.mcs, inputData.therm, inputData.skip);
+					//TODO choose preferred class for InputData
+					InputData inputDataVar=new Bi(inputData.latticeLength, T, inputData.H, inputData.nJ, inputData.J, inputData.mcs, inputData.therm, inputData.skip);
 					tempResult=sim.run(inputDataVar,results);// run the simulation multiple times
 				}
 				}
